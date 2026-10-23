@@ -1,7 +1,8 @@
 // import NavBar from "../component/navBar";
 import NavBar from "../component/navBar";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../Context/authContext";
 
 const inputClass =
   "rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-amber-400";
@@ -44,6 +45,7 @@ export default function LoginPage() {
 }
 
 function Login() {
+  const { login } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -51,71 +53,65 @@ function Login() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const user = users.find(
-      (u) => u.email === data.email && u.password === data.password,
-    );
-
-    if (!user) {
-      alert("Invalid email or password");
+    const result = login(data.email, data.password);
+    if (!result.success) {
+      alert(result.message);
       return;
     }
-
-    alert(`Welcome back, ${user.username}!`);
-
-    console.log(data); // runs only when all rules pass
+    alert("Login successful");
   };
   return (
-    <form
-      className="mt-8 flex flex-col gap-5"
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-    >
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Email</label>
-        <input
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Enter a valid email address",
-            },
-          })}
-          type="email"
-          placeholder="Email"
-          className={inputClass}
-        />
-        {errors.email && (
-          <span className="text-sm text-red-500">{errors.email.message}</span>
-        )}
-      </div>
+    <div>
+      <form
+        className="mt-8 flex flex-col gap-5"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        <div className="flex flex-col gap-1">
+          <label className={labelClass}>Email</label>
+          <input
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Enter a valid email address",
+              },
+            })}
+            type="email"
+            placeholder="Email"
+            className={inputClass}
+          />
+          {errors.email && (
+            <span className="text-sm text-red-500">{errors.email.message}</span>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Password</label>
-        <input
-          {...register("password", {
-            required: "Password is required",
-          })}
-          type="password"
-          placeholder="Password"
-          className={inputClass}
-        />
-        {errors.password && (
-          <span className="text-sm text-red-500">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+        <div className="flex flex-col gap-1">
+          <label className={labelClass}>Password</label>
+          <input
+            {...register("password", {
+              required: "Password is required",
+            })}
+            type="password"
+            placeholder="Password"
+            className={inputClass}
+          />
+          {errors.password && (
+            <span className="text-sm text-red-500">
+              {errors.password.message}
+            </span>
+          )}
+        </div>
 
-      <button type="submit" className={buttonClass}>
-        Login
-      </button>
-    </form>
+        <button className={buttonClass}>Login</button>
+      </form>
+    </div>
   );
 }
 
 function Register() {
+  const { signUp } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -123,85 +119,75 @@ function Register() {
   } = useForm();
 
   const onSubmit = (data) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const exist = users.some(
-      (u) => u.email === data.email || u.password === data.password,
-    );
-
-    if (exist) {
-      alert("Email or username is already registered");
-      return;
-    }
-
-    localStorage.setItem("users", JSON.stringify([...users, data]));
-    console.log(data);
+    signUp(data.username, data.email, data.password);
   };
   return (
-    <form
-      className="mt-8 flex flex-col gap-5"
-      onSubmit={handleSubmit(onSubmit)}
-      noValidate
-    >
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Username</label>
-        <input
-          {...register("username", {
-            required: "Username is required",
-            minLength: { value: 3, message: "At least 3 characters" },
-            maxLength: { value: 20, message: "At most 20 characters" },
-          })}
-          type="text"
-          placeholder="User name"
-          className={inputClass}
-        />
-        {errors.username && (
-          <span className="text-sm text-red-500">
-            {errors.username.message}
-          </span>
-        )}
-      </div>
+    <div>
+      <form
+        className="mt-8 flex flex-col gap-5"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        <div className="flex flex-col gap-1">
+          <label className={labelClass}>Username</label>
+          <input
+            {...register("username", {
+              required: "Username is required",
+              minLength: { value: 3, message: "At least 3 characters" },
+              maxLength: { value: 20, message: "At most 20 characters" },
+            })}
+            type="text"
+            placeholder="User name"
+            className={inputClass}
+          />
+          {errors.username && (
+            <span className="text-sm text-red-500">
+              {errors.username.message}
+            </span>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Email</label>
-        <input
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Enter a valid email address",
-            },
-          })}
-          type="email"
-          placeholder="Email"
-          className={inputClass}
-        />
-        {errors.email && (
-          <span className="text-sm text-red-500">{errors.email.message}</span>
-        )}
-      </div>
+        <div className="flex flex-col gap-1">
+          <label className={labelClass}>Email</label>
+          <input
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Enter a valid email address",
+              },
+            })}
+            type="email"
+            placeholder="Email"
+            className={inputClass}
+          />
+          {errors.email && (
+            <span className="text-sm text-red-500">{errors.email.message}</span>
+          )}
+        </div>
 
-      <div className="flex flex-col gap-1">
-        <label className={labelClass}>Password</label>
-        <input
-          {...register("password", {
-            required: "Password is required",
-            minLength: { value: 6, message: "At least 6 characters" },
-          })}
-          type="password"
-          placeholder="Password"
-          className={inputClass}
-        />
-        {errors.password && (
-          <span className="text-sm text-red-500">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+        <div className="flex flex-col gap-1">
+          <label className={labelClass}>Password</label>
+          <input
+            {...register("password", {
+              required: "Password is required",
+              minLength: { value: 6, message: "At least 6 characters" },
+            })}
+            type="password"
+            placeholder="Password"
+            className={inputClass}
+          />
+          {errors.password && (
+            <span className="text-sm text-red-500">
+              {errors.password.message}
+            </span>
+          )}
+        </div>
 
-      <button type="submit" className={buttonClass}>
-        Register
-      </button>
-    </form>
+        <button type="submit" className={buttonClass}>
+          Register
+        </button>
+      </form>
+    </div>
   );
 }
