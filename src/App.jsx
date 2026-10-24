@@ -3,12 +3,18 @@
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "./assets/vite.svg";
 import "./App.css";
+import router from "./routers/router";
+import AuthProvider from "./Context/authContext";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
+  <AuthProvider></AuthProvider>;
   return (
-    <div>
-      <h1>Hi and hello from me </h1>
-    </div>
+    <AuthProvider>
+      <div>
+        <RouterProvider router={router} />
+      </div>
+    </AuthProvider>
   );
 }
 
