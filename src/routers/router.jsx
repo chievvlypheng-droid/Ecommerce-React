@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import ProductDetail from "../pages/Productdetail";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/loginPage";
-// import ProfilePage from "../pages/profilePage";
+import CardPage from "../pages/cardPage";
 
 const router = createBrowserRouter([
   {
@@ -17,10 +17,10 @@ const router = createBrowserRouter([
     path: "/loginPage",
     element: <LoginPage />,
   },
-  // {
-  //   path: "/ProfilePage",
-  //   element: <ProfilePage />,
-  // },
+  {
+    path: "/cardPage",
+    element: <CardPage />,
+  },
 ]);
 
 export default router;

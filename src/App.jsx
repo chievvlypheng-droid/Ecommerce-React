@@ -6,14 +6,16 @@ import "./App.css";
 import router from "./routers/router";
 import AuthProvider from "./Context/authContext";
 import { RouterProvider } from "react-router-dom";
-
+import CartProvider from "./Context/cartContext";
 function App() {
   <AuthProvider></AuthProvider>;
   return (
     <AuthProvider>
-      <div>
-        <RouterProvider router={router} />
-      </div>
+      <CartProvider>
+        <div>
+          <RouterProvider router={router} />
+        </div>
+      </CartProvider>
     </AuthProvider>
   );
 }

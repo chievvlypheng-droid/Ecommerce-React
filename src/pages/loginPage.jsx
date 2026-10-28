@@ -1,8 +1,9 @@
 // import NavBar from "../component/navBar";
 import NavBar from "../component/navBar";
 import { useForm } from "react-hook-form";
-import { useState, useContext } from "react";
-import { AuthContext } from "../Context/authContext";
+import { useState } from "react";
+import { UseAuth } from "../Context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const inputClass =
   "rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-amber-400";
@@ -45,12 +46,14 @@ export default function LoginPage() {
 }
 
 function Login() {
-  const { login } = useContext(AuthContext);
+  const { login } = UseAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     const result = login(data.email, data.password);
@@ -58,7 +61,7 @@ function Login() {
       alert(result.message);
       return;
     }
-    alert("Login successful");
+    navigate("/");
   };
   return (
     <div>
@@ -110,7 +113,7 @@ function Login() {
 }
 
 function Register() {
-  const { signUp } = useContext(AuthContext);
+  const { signUp } = UseAuth();
 
   const {
     register,

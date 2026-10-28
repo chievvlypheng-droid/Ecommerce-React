@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../Context/authContext";
+import { UseAuth } from "../Context/authContext";
 
 export default function NavBar() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = UseAuth();
   const initial = user?.email?.[0]?.toUpperCase();
 
   return (
@@ -13,7 +12,13 @@ export default function NavBar() {
           Shopping Hub
         </h1>
 
-        {user && (
+        {!user ? (
+          <div>
+            <Link to="/loginPage" class="bg-blue-500 rounded-lg p-2">
+              Login
+            </Link>
+          </div>
+        ) : (
           <div className="flex items-center gap-3">
             <div
               title={user.email}
@@ -33,18 +38,18 @@ export default function NavBar() {
 
       <div className="flex w-full flex-row gap-6 bg-slate-800 px-6 py-2">
         <Link
-          to="/loginPage"
-          className="font-medium text-slate-300 hover:text-amber-400 hover:underline"
-        >
-          Login
-        </Link>
-        <Link
           to="/"
           className="font-medium text-slate-300 hover:text-amber-400 hover:underline"
         >
           Home
         </Link>
-        <Link to="/profilePage">Profile page</Link>
+
+        <Link
+          to="/cardPage"
+          className="font-medium text-slate-300 hover:text-amber-400 hover:underline"
+        >
+          Card
+        </Link>
       </div>
     </div>
   );
