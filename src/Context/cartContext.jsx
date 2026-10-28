@@ -22,8 +22,43 @@ export default function CartProvider({ children }) {
     }
   }
 
+  function increment(id) {
+    setCartItem((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      ),
+    );
+  }
+  function decrement(productId) {
+    setCartItem((prev) =>
+      prev.map((item) =>
+        item.id === productId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      ),
+    );
+  }
+  function placeOrder() {
+    setCartItem([]);
+    alert("successfully order");
+  }
+
+  function removeFromCart(productID) {
+    setCartItem(cartItem.filter((item) => item.id !== productID)); // keep only the item that not match the id of the click button
+  }
+
   return (
-    <cartContext.Provider value={{ addToCart, setCartItem, cartItem }}>
+    <cartContext.Provider
+      value={{
+        addToCart,
+        setCartItem,
+        cartItem,
+        increment,
+        decrement,
+        removeFromCart,
+        placeOrder,
+      }}
+    >
       {children}
     </cartContext.Provider>
   );

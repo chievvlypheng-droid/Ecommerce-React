@@ -43,12 +43,7 @@ export default function NavBar() {
         >
           Home
         </Link>
-        <Link
-          to="/profilePage"
-          className="font-medium text-slate-300 hover:text-amber-400 hover:underline"
-        >
-          Profile page
-        </Link>
+
         <Link
           to="/cardPage"
           className="font-medium text-slate-300 hover:text-amber-400 hover:underline"
