@@ -10,14 +10,16 @@ export default function AuthProvider({ children }) {
   );
 
   function signUp(username, email, password) {
-    const storedUser = localStorage.getItem("user") || [];
+    // CHANGED: removed `|| []` (getItem returns a string or null, never an array)
+    const storedUser = localStorage.getItem("user");
     const users = storedUser ? JSON.parse(storedUser) : [];
 
     if (users.find((u) => u.email === email)) {
       return { success: false, message: "Email already exists" };
     }
     if (users.find((u) => u.username === username)) {
-      return { success: false, message: "Email already exists" };
+      // CHANGED: message said "Email" for a username clash
+      return { success: false, message: "Username already exists" };
     }
     const newUser = { username, email, password };
 
